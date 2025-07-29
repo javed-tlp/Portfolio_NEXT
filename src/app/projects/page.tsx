@@ -9,7 +9,7 @@ const Projects = () => (
       <div className="content-list">
         {/* Portfolio Website Project */}
         <ContentItem 
-          title="Portfolio Website" 
+          title="Portfolio sWebsite" 
           details={[
             "<strong>Technologies Used:</strong> Next.js, Tailwind CSS, HTML, JavaScript",
             "• This is my personal portfolio, showcasing my skills and projects built with Next.js.",
