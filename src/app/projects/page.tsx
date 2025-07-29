@@ -62,6 +62,19 @@ const Projects = () => (
           link="http://marmo.theloyaltypartner.co.in/" 
           image="Marmo.jpg" // Replace with actual image path
         />
+        {/* Idemitsu Engage App Project */}
+        <ContentItem 
+          title="Idemitsu Engage App – Sales Force Automation (SFA)" 
+          details={[
+            "<strong>Technologies Used:</strong> Angular, Node.js, Express.js, MongoDB",
+            "• Developed a robust SFA module for Idemitsu, a leading Japanese lubricant company.",
+            "• Integrated features for automated order assignment, daily issue resolution workflows, and DMS (Dealer Management System) order processing.",
+            "• Implemented multiple administrative provisions to streamline daily operations and field force management.",
+            "• The system significantly reduced manual errors, improved turnaround time, and enhanced operational transparency."
+          ]}
+          link="http://idemitsu.basiq360.com/" // Replace with actual if exists
+          image="idemitsu.jpg" // Replace with actual image path
+        />
       </div>
     </Section>
   </>
