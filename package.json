@@ -1,16 +1,17 @@
 {
   "name": "portfolio-next-repo-root",
   "private": true,
-  "description": "Vercel uses this file to detect Next.js. The app lives in Portfolio_NEXT/.",
+  "description": "Monorepo root. The Next.js app is in Portfolio_NEXT/. Vercel uses vercel.json to build there.",
   "dependencies": {
     "next": "14.2.7",
     "react": "^18",
     "react-dom": "^18"
   },
   "scripts": {
-    "build": "npm run build --prefix Portfolio_NEXT",
-    "dev": "npm run dev --prefix Portfolio_NEXT",
-    "lint": "npm run lint --prefix Portfolio_NEXT",
-    "start": "npm run start --prefix Portfolio_NEXT"
+    "build": "cd Portfolio_NEXT && npm run build",
+    "dev": "cd Portfolio_NEXT && npm run dev",
+    "lint": "cd Portfolio_NEXT && npm run lint",
+    "start": "cd Portfolio_NEXT && npm run start",
+    "postinstall": "cd Portfolio_NEXT && npm install"
   }
 }
