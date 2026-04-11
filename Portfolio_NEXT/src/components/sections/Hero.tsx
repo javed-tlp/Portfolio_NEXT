@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HeroPortrait } from "@/components/sections/HeroPortrait";
+import { HeroGallery } from "@/components/sections/HeroGallery";
 import { FaGithub, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { HiArrowRight, HiMail } from "react-icons/hi";
 import { siteConfig } from "@/config/site";
@@ -91,7 +91,7 @@ export function Hero() {
           </div>
         </div>
 
-        <HeroPortrait name={siteConfig.name} />
+        <HeroGallery name={siteConfig.name} />
       </div>
     </section>
   );

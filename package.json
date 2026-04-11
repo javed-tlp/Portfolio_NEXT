@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-next-repo-root",
+  "private": true,
+  "description": "Vercel uses this file to detect Next.js. The app lives in Portfolio_NEXT/.",
+  "dependencies": {
+    "next": "14.2.7",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "scripts": {
+    "build": "npm run build --prefix Portfolio_NEXT",
+    "dev": "npm run dev --prefix Portfolio_NEXT",
+    "lint": "npm run lint --prefix Portfolio_NEXT",
+    "start": "npm run start --prefix Portfolio_NEXT"
+  }
+}
