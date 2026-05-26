@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
-import { ContactForm } from "@/components/forms/ContactForm";
+// import { ContactForm } from "@/components/forms/ContactForm";
 import { ScrollProgress } from "@/components/motion/ScrollProgress";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/motion/ScrollReveal";
 import { ExperienceTimeline } from "@/components/sections/ExperienceTimeline";
@@ -174,9 +174,9 @@ export function OnePageShell({ hero }: { hero: ReactNode }) {
             title="Let’s connect"
             subtitle={`Email: ${siteConfig.email} · Phone: ${siteConfig.phone}`}
           />
-          <ScrollReveal delay={0.1}>
+          {/* <ScrollReveal delay={0.1}>
             <ContactForm />
-          </ScrollReveal>
+          </ScrollReveal> */}
         </div>
       </section>
     </>
