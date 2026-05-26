@@ -1,0 +1,121 @@
+/* Main Content Item Container */
+.content-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding: 1.2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+.content-item:hover {
+    transform: translateY(-8px); /* Lift higher for more dramatic effect */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+    background-color: #fff8e1; /* Light yellow for hover effect */
+}
+
+/* Title and Details Container */
+.content-text {
+    flex: 1;
+    margin-right: 1.2rem;
+    max-width: 1000px;
+}
+
+/* Content Image */
+.content-image {
+    max-width: 350px;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.4s ease, box-shadow 0.4s ease; /* Longer transition for smoother effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.content-image:hover {
+    transform: scale(1.08); /* Increased scaling for a bolder effect */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+/* Title Background */
+.content-text .title {
+    background-color: #ff7043; /* Bright orange for a lively vibe */
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+
+/* Heading Inside Content Item */
+.content-text h3 {
+    font-size: 1.8rem; /* Slightly larger for emphasis */
+    margin: 0;
+    color: #2c3e50; /* Deep navy color for contrast */
+    font-weight: 700;
+}
+
+/* Content Description Inside Content Item */
+.content-text p {
+    background-color: #ffffff; /* White background for contrast */
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #616161; /* Soft grey for easy readability */
+    margin: 0.6rem 0;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Light shadow for details */
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
+}
+
+.content-text p:hover {
+    background-color: #ffe082; /* Light yellow hover effect */
+}
+
+/* Link Styles */
+.content-text a {
+    color: #ff7043;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.content-text a:hover {
+    color: #ff5722; /* Darker orange on hover */
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .content-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .content-text {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .content-image {
+        max-width: 100%; /* Full width on smaller screens */
+        height: auto;
+    }
+}
+
+@media (max-width: 375px) {
+    .content-item {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .content-text h3 {
+        font-size: 1.5rem;
+    }
+
+    .content-text p {
+        font-size: 0.95rem;
+    }
+}

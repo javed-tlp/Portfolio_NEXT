@@ -1,0 +1,196 @@
+/* Navbar container */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space out the children elements */
+  background: linear-gradient(90deg, #0d0d0d, #434343); /* Darker gradient background */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Slightly deeper shadow for better contrast */
+  padding: 10px 20px; /* Reduced padding for a more compact look */
+  z-index: 1000;
+  transition: background 0.3s ease; /* Smooth transition on scroll or hover */
+}
+
+/* Logo styles */
+.logo {
+  /* Align logo to the left */
+}
+
+.logo-text {
+  font-size: 30px; /* Larger font size for the logo text */
+  font-weight: bold; /* Bold text for emphasis */
+  color: #e0e0e0; /* Light gray color */
+}
+
+/* Menu toggle for mobile */
+.menu-toggle {
+  display: none; /* Hidden by default on larger screens */
+  cursor: pointer;
+  position: relative; /* Position relative for the dots */
+  width: 30px; /* Increased width for better visibility */
+  height: 30px; /* Increased height for better visibility */
+  transition: transform 0.3s ease; /* Smooth transform transition */
+}
+
+/* Container for dots */
+.menu-toggle::before,
+.menu-toggle::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 4px; /* Thicker dots for a modern look */
+  background-color: #e0e0e0; /* Light gray color for the dots */
+  border-radius: 2px; /* Rounded corners for a smoother appearance */
+  transition: background-color 0.3s ease; /* Transition for color change */
+}
+
+/* Position of the first dot */
+.menu-toggle::before {
+  top: 6px; /* Spacing from the top */
+}
+
+/* Position of the second dot */
+.menu-toggle::after {
+  bottom: 6px; /* Spacing from the bottom */
+}
+
+/* Middle dot with animation */
+.menu-toggle div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px; /* Width of the middle dot */
+  height: 4px; /* Height of the middle dot */
+  background-color: #e0e0e0; /* Light gray color for the dot */
+  border-radius: 2px; /* Rounded corners for a smoother appearance */
+  transform: translate(-50%, -50%) rotate(0deg); /* Center the dot */
+  transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
+}
+
+/* Active state for menu toggle */
+.menu-toggle.active div {
+  background-color: #ff5722; /* Change color when active */
+  transform: translate(-50%, -50%) rotate(45deg); /* Rotate the dot when active */
+}
+
+/* Hover effect for the menu toggle */
+.menu-toggle:hover::before,
+.menu-toggle:hover::after,
+.menu-toggle:hover div {
+  background-color: #ff5722; /* Change color on hover */
+}
+
+/* Navigation list */
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end; /* Space out the links */
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
+}
+
+/* Navigation items */
+.nav-links li {
+  margin: 0 15px; /* Reduced spacing between items */
+  display: flex;
+  align-items: center;
+}
+
+/* Links */
+.nav-links a {
+  color: #e0e0e0; /* Lighter gray for better readability */
+  text-decoration: none;
+  font-size: 15px; /* Reduced font size for a more compact look */
+  font-weight: 500;
+  padding: 10px 15px; /* Reduced padding for smaller link area */
+  transition: color 0.3s ease; /* Transition only for text color */
+  border-radius: 6px; /* Rounded corners for a softer look */
+  display: flex;
+  align-items: center;
+}
+
+/* Icon styles */
+.nav-icon {
+  margin-right: 6px; /* Reduced space between icon and text */
+  width: 18px; /* Smaller icon size */
+  height: 18px; /* Smaller icon size */
+  color: inherit; /* Ensure icon color inherits from link */
+}
+
+/* Hover effect for links */
+.nav-links a:hover,
+.nav-links a:focus {
+  color: #ff5722; /* Modern orange accent color */
+}
+
+/* Modern design for the "Download CV" tab */
+.cv-link {
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff4081, #ff6e40); /* Vibrant pink-orange gradient */
+  padding: 10px 20px; /* Reduced padding for smaller button */
+  border-radius: 20px; /* More rounded corners for a modern look */
+  font-weight: 700; /* Bolder text for emphasis */
+  text-decoration: none;
+  transition: all 0.4s ease; /* Longer transition for smoother effects */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Slightly less pronounced shadow */
+  display: flex;
+  align-items: center;
+}
+
+/* Hover effect for the "Download CV" tab */
+.cv-link:hover {
+  background: linear-gradient(135deg, #ffff40, #6c64bb); /* Reverse gradient on hover */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
+  transform: scale(1.03); /* Slightly smaller scale effect */
+  color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 468px) {
+  .nav {
+    height: 80px; /* Increase height of the navbar */
+    padding: 20px 20px; /* Adjust padding to fit new height */
+  }
+
+  .menu-toggle {
+    display: block; /* Show menu toggle on screens below 468px */
+    position: absolute;
+    right: 20px; /* Align to the right side */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+  }
+
+  .logo {
+    position: absolute;
+    left: 20px; /* Align logo to the left */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 80px; /* Align below the navbar */
+    left: 0;
+    width: 100%;
+    background: #212121; /* Dark background for the mobile menu */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0; /* Add padding to the mobile menu */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Shadow for the mobile menu */
+    transition: transform 0.3s ease;
+    transform: translateY(-100%); /* Initially hidden */
+  }
+
+  .nav-links.show {
+    transform: translateY(0); /* Show the menu when active */
+  }
+
+  .nav-links.hide {
+    display: none; /* Hide the menu when not active */
+  }
+}

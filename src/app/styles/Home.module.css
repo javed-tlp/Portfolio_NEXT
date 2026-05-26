@@ -1,0 +1,22 @@
+/* src/styles/Home.module.css */
+.main {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .imageContainer {
+    margin: 20px 0;
+  }
+  
+  .image {
+    border-radius: 50%;
+  }
+  
+  .description {
+    margin: 20px 0;
+  }
+  
+  .section {
+    margin: 40px 0;
+  }
+  
