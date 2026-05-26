@@ -1,13 +1,5 @@
-// import Navbar from "../components/Navbar"; // Update path if needed
-import ContactForm from "../components/ContactForm";
+import { RedirectToHash } from "@/components/RedirectToHash";
 
-const Contact = () => (
-  <>
-    {/* <Navbar /> Add the Navbar component here */}
-    <section id="contact" className="section contact">
-      <ContactForm />
-    </section>
-  </>
-);
-
-export default Contact;
+export default function ContactPage() {
+  return <RedirectToHash hash="contact" />;
+}
