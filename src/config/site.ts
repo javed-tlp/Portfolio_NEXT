@@ -181,7 +181,7 @@ export const projectItems: readonly ProjectEntry[] = [
   },
   {
     id: "sfa-marmo",
-    title: "Sales Force Automation (SFA) Platform",
+    title: "Sales Force Authhhhomation (SFA) Platform",
     client: "Marmo Solutions",
     period: "Production deployment",
     tagline: "Parallel SFA rollout with similar enterprise constraints.",

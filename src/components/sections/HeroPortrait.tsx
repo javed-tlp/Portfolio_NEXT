@@ -8,7 +8,7 @@ type HeroPortraitProps = {
 /**
  * Minimal treatment: photo only, soft depth behind, no frames or extra UI.
  */
-export function HeroPortrait({ name, imageSrc = "/javed.png" }: HeroPortraitProps) {
+export function HeroPortrait({ name, imageSrc = "/javed.jpeg" }: HeroPortraitProps) {
   return (
     <div className="relative mx-auto w-full max-w-[400px] lg:max-w-[440px] lg:justify-self-end">
       {/* Quiet depth — offset slab, no text, no effects */}

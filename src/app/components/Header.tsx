@@ -8,7 +8,7 @@ const Header: React.FC = () => (
       <div className={styles.content}>
         <div className={styles.imageSection}>
           <Image
-            src="/javed.png"
+            src="/javed.jpeg"
             alt="Javed Saifi"
             width={300}
             height={200}
