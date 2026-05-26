@@ -1,3 +1,10 @@
+/** Hero / about photos — files live in `public/photos/`. Add or replace JPEGs anytime. */
+export const heroGallery = [
+  { src: "/photos/javed-1.jpeg", alt: "Javed Saifi — portrait" },
+  { src: "/photos/javed-2.jpg", alt: "Javed Saifi" },
+  { src: "/photos/javed-3.jpg", alt: "Javed Saifi — professional" },
+] as const;
+
 export const siteConfig = {
   name: "Javed Saifi",
   role: "Full Stack Developer",

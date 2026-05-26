@@ -1,0 +1,5 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd Portfolio_NEXT && npm ci",
+  "buildCommand": "cd Portfolio_NEXT && npm run build"
+}
