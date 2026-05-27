@@ -15,12 +15,17 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="mesh-bg relative scroll-mt-20 overflow-hidden pt-24 pb-20 sm:pt-28 sm:pb-28"
+      className="mesh-bg relative scroll-mt-20 overflow-hidden pt-20 pb-16 sm:pt-28 sm:pb-28"
     >
       <div className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22rgb%2851%2065%2085%20%2F%200.25%29%22%20stroke-width%3D%220.5%22%3E%3Cpath%20d%3D%22M0%20.5h40M40%200v40%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-40" />
 
-      <div className="relative mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
-        <div className="animate-fade-up">
+      <div className="relative mx-auto grid max-w-6xl gap-8 px-4 sm:gap-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
+        {/* Portrait first on mobile for stronger visual impact */}
+        <div className="order-1 flex justify-center px-1 sm:order-2 sm:justify-end lg:order-2">
+          <HeroPortrait name={siteConfig.name} />
+        </div>
+
+        <div className="animate-fade-up order-2 sm:order-1 lg:order-1">
           <p className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-emerald-400/90">
             Available for opportunities
           </p>
@@ -90,8 +95,6 @@ export function Hero() {
             ))}
           </div>
         </div>
-
-        <HeroPortrait name={siteConfig.name} />
       </div>
     </section>
   );

@@ -226,3 +226,17 @@ body {
     font-size: 14px; /* Consistent font size */
   }
 }
+
+@keyframes portrait-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.portrait-progress-bar {
+  animation: portrait-progress linear forwards;
+  transform-origin: left center;
+}
