@@ -10,6 +10,10 @@ export const metadata: Metadata = {
     template: `%s — ${siteConfig.name}`,
   },
   description: siteConfig.tagline,
+  icons: {
+    icon: [{ url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" }],
+    shortcut: "/favicon-16x16.png",
+  },
 };
 
 export default function RootLayout({
