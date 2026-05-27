@@ -1,6 +1,10 @@
 import Image from "next/image";
 import styles from "../components/Header.module.css";
-import { FaTwitter, FaLinkedin, FaGithub, FaInstagram, FaInfoCircle, FaHandshake } from 'react-icons/fa'; // Font Awesome icons
+import { FaTwitter, FaLinkedin, FaGithub, FaInstagram, FaInfoCircle, FaHandshake } from 'react-icons/fa';
+import { getPrimaryPortraitSrc } from "@/lib/portraitImages";
+import { siteConfig } from "@/config/site";
+
+const portraitSrc = getPrimaryPortraitSrc(siteConfig.name);
 
 const Header: React.FC = () => (
   <div className={styles.wrapper}>
@@ -8,7 +12,7 @@ const Header: React.FC = () => (
       <div className={styles.content}>
         <div className={styles.imageSection}>
           <Image
-            src="/javed.jpeg"
+            src={portraitSrc}
             alt="Javed Saifi"
             width={300}
             height={200}

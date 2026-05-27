@@ -5,21 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-
-const PORTRAIT_IMAGES = [
-  {
-    src: "/javed.jpeg",
-    alt: "Javed Saifi on a motorcycle",
-    objectPosition: "50% 20%",
-    mobileObjectPosition: "50% 24%",
-  },
-  {
-    src: "/javed1.png",
-    alt: "Javed Saifi at work",
-    objectPosition: "50% 16%",
-    mobileObjectPosition: "50% 20%",
-  },
-] as const;
+import type { PortraitImage } from "@/lib/portraitImages";
 
 const SLIDE_DURATION_MS = 8000;
 const TRANSITION_S = 1.05;
@@ -29,9 +15,10 @@ const ease = [0.25, 0.1, 0.25, 1] as const;
 
 type HeroPortraitProps = {
   name: string;
+  images: PortraitImage[];
 };
 
-export function HeroPortrait({ name }: HeroPortraitProps) {
+export function HeroPortrait({ name, images }: HeroPortraitProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useMediaQuery("(max-width: 639px)");
   const isTouch = useMediaQuery("(hover: none), (pointer: coarse)");
@@ -41,10 +28,18 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
   const [paused, setPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const indexRef = useRef(index);
+  const imagesRef = useRef(images);
+
   indexRef.current = index;
+  imagesRef.current = images;
+
+  const count = images.length;
+  const hasMultiple = count > 1;
+  const safeIndex = count > 0 ? Math.min(index, count - 1) : 0;
 
   const goTo = useCallback((next: number) => {
-    const len = PORTRAIT_IMAGES.length;
+    const len = imagesRef.current.length;
+    if (len <= 1) return;
     const normalized = ((next % len) + len) % len;
     if (normalized === indexRef.current) return;
     setDirection(normalized > indexRef.current ? 1 : -1);
@@ -55,31 +50,44 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
   const prev = useCallback(() => goTo(indexRef.current - 1), [goTo]);
 
   useEffect(() => {
-    PORTRAIT_IMAGES.forEach((img) => {
+    if (index >= count && count > 0) setIndex(0);
+  }, [count, index]);
+
+  useEffect(() => {
+    images.forEach((img) => {
       const link = document.createElement("link");
       link.rel = "preload";
       link.as = "image";
       link.href = img.src;
       document.head.appendChild(link);
     });
-  }, []);
+  }, [images]);
 
   useEffect(() => {
-    if (paused || prefersReducedMotion) return;
+    if (!hasMultiple || paused || prefersReducedMotion) return;
     const id = window.setInterval(() => goTo(indexRef.current + 1), SLIDE_DURATION_MS);
     return () => window.clearInterval(id);
-  }, [paused, goTo, prefersReducedMotion]);
+  }, [hasMultiple, paused, goTo, prefersReducedMotion]);
 
   useEffect(() => {
+    if (!hasMultiple) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [next, prev]);
+  }, [hasMultiple, next, prev]);
 
-  const current = PORTRAIT_IMAGES[index];
+  if (count === 0) {
+    return (
+      <div className="mx-auto flex aspect-[4/5] w-full max-w-[400px] items-center justify-center rounded-2xl border border-dashed border-slate-700 bg-slate-900/50 text-sm text-slate-500">
+        Add photos to <code className="mx-1 text-emerald-400/90">public/javed/</code>
+      </div>
+    );
+  }
+
+  const current = images[safeIndex];
   const kenBurnsScale = isMobile ? 1.045 : 1.07;
   const slideOffset = isMobile ? 22 : 32;
   const useBlur = !prefersReducedMotion && !isMobile;
@@ -103,6 +111,7 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (!hasMultiple) return;
     touchStartX.current = e.touches[0].clientX;
     setPaused(true);
   };
@@ -112,7 +121,7 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
     touchStartX.current = null;
     setPaused(false);
 
-    if (start === null) return;
+    if (!hasMultiple || start === null) return;
     const delta = start - e.changedTouches[0].clientX;
     if (Math.abs(delta) < SWIPE_THRESHOLD) return;
     if (delta > 0) next();
@@ -131,27 +140,24 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) setPaused(false);
       }}
     >
-      {/* Ambient glow — tighter on mobile to avoid overflow */}
       <div
-        className="pointer-events-none absolute -inset-3 rounded-[1.75rem] bg-gradient-to-br from-emerald-500/25 via-cyan-500/10 to-transparent opacity-60 blur-2xl transition-opacity duration-700 sm:-inset-6 sm:opacity-70 sm:group-hover/portrait:opacity-100"
+        className="pointer-events-none absolute -inset-3 rounded-[1.75rem] bg-gradient-to-br from-emerald-500/25 via-cyan-500/10 to-transparent opacity-60 blur-2xl sm:-inset-6 sm:opacity-70"
         aria-hidden
       />
 
-      {/* Depth slab — scaled for small screens */}
       <div
         className="absolute -right-1 bottom-2 left-2 top-5 rounded-[1.25rem] bg-gradient-to-br from-slate-700/50 to-slate-900/75 sm:-right-2 sm:bottom-3 sm:left-8 sm:top-8 sm:rounded-[1.35rem]"
         aria-hidden
       />
 
-      {/* Gradient frame */}
       <div
-        className="portrait-border-pulse relative rounded-[1.25rem] p-[1px] shadow-[0_20px_48px_-14px_rgba(0,0,0,0.8)] sm:rounded-[1.35rem] sm:shadow-[0_28px_60px_-16px_rgba(0,0,0,0.75)]"
+        className="relative rounded-[1.25rem] p-[1px] shadow-[0_20px_48px_-14px_rgba(0,0,0,0.8)] sm:rounded-[1.35rem] sm:shadow-[0_28px_60px_-16px_rgba(0,0,0,0.75)]"
         style={{
           background:
             "linear-gradient(135deg, rgba(52,211,153,0.5) 0%, rgba(34,211,238,0.25) 45%, rgba(255,255,255,0.1) 100%)",
         }}
         role="region"
-        aria-roledescription="carousel"
+        aria-roledescription={hasMultiple ? "carousel" : undefined}
         aria-label={`Photos of ${name}`}
       >
         <div
@@ -164,7 +170,6 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
           }}
           style={{ touchAction: "pan-y pinch-zoom" }}
         >
-          {/* Image viewport — controlled height on phones (iPhone-safe dvh) */}
           <div
             className="relative w-full overflow-hidden
               h-[min(48dvh,400px)] min-h-[280px]
@@ -201,7 +206,7 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
                     fill
                     className="object-cover"
                     style={{ objectPosition }}
-                    priority={index === 0}
+                    priority={safeIndex === 0}
                     sizes="(max-width: 640px) 88vw, (max-width: 1024px) 400px, 460px"
                     draggable={false}
                   />
@@ -209,25 +214,11 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
               </motion.div>
             </AnimatePresence>
 
-            {/* Film grain + vignette */}
-            <div className="portrait-grain pointer-events-none absolute inset-0 opacity-30 mix-blend-overlay" aria-hidden />
             <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-slate-950/10 opacity-85 sm:opacity-90"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-500/[0.06] via-transparent to-cyan-500/[0.04]"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"
               aria-hidden
             />
 
-            {/* Shine sweep */}
-            {!prefersReducedMotion && (
-              <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-                <div className="portrait-shine-sweep absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-              </div>
-            )}
-
-            {/* Corner accents */}
             <span className="pointer-events-none absolute left-2.5 top-2.5 h-5 w-5 border-l border-t border-emerald-400/50 sm:left-3 sm:top-3 sm:h-6 sm:w-6" aria-hidden />
             <span className="pointer-events-none absolute right-2.5 top-2.5 h-5 w-5 border-r border-t border-cyan-400/40 sm:right-3 sm:top-3 sm:h-6 sm:w-6" aria-hidden />
             <span className="pointer-events-none absolute bottom-14 left-2.5 h-5 w-5 border-b border-l border-white/15 sm:bottom-16 sm:left-3 sm:h-6 sm:w-6" aria-hidden />
@@ -235,11 +226,10 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
 
             <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[0.07]" aria-hidden />
 
-            {/* Progress bar */}
-            {!prefersReducedMotion && (
+            {hasMultiple && !prefersReducedMotion && (
               <div className="absolute inset-x-0 top-0 z-20 h-[2px] overflow-hidden bg-white/5">
                 <div
-                  key={index}
+                  key={safeIndex}
                   className="portrait-progress-bar h-full bg-gradient-to-r from-emerald-400 to-cyan-400"
                   style={{
                     animationDuration: `${SLIDE_DURATION_MS}ms`,
@@ -249,98 +239,102 @@ export function HeroPortrait({ name }: HeroPortraitProps) {
               </div>
             )}
 
-            {/* Nav — always visible on touch / mobile */}
-            <button
-              type="button"
-              onClick={prev}
-              aria-label="Previous photo"
-              className="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-950/65 text-white/90 backdrop-blur-md transition hover:border-emerald-400/50 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 active:scale-95 sm:left-3 sm:h-10 sm:w-10 sm:bg-slate-950/50 sm:opacity-0 sm:group-hover/portrait:opacity-100 [@media(hover:none)]:opacity-90"
-            >
-              <HiChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              aria-label="Next photo"
-              className="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-950/65 text-white/90 backdrop-blur-md transition hover:border-emerald-400/50 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 active:scale-95 sm:right-3 sm:h-10 sm:w-10 sm:bg-slate-950/50 sm:opacity-0 sm:group-hover/portrait:opacity-100 [@media(hover:none)]:opacity-90"
-            >
-              <HiChevronRight className="h-5 w-5" />
-            </button>
+            {hasMultiple && (
+              <>
+                <button
+                  type="button"
+                  onClick={prev}
+                  aria-label="Previous photo"
+                  className="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-950/65 text-white/90 backdrop-blur-md transition hover:border-emerald-400/50 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 active:scale-95 sm:left-3 sm:h-10 sm:w-10 sm:bg-slate-950/50 sm:opacity-0 sm:group-hover/portrait:opacity-100 [@media(hover:none)]:opacity-90"
+                >
+                  <HiChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  aria-label="Next photo"
+                  className="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-950/65 text-white/90 backdrop-blur-md transition hover:border-emerald-400/50 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 active:scale-95 sm:right-3 sm:h-10 sm:w-10 sm:bg-slate-950/50 sm:opacity-0 sm:group-hover/portrait:opacity-100 [@media(hover:none)]:opacity-90"
+                >
+                  <HiChevronRight className="h-5 w-5" />
+                </button>
 
-            {/* Dot indicators — mobile only (thumbnails on desktop) */}
-            <div className="absolute bottom-3 left-0 right-0 z-20 flex justify-center gap-2 sm:hidden">
-              {PORTRAIT_IMAGES.map((img, i) => {
-                const active = i === index;
-                return (
-                  <button
-                    key={img.src}
-                    type="button"
-                    onClick={() => goTo(i)}
-                    aria-label={`Show photo ${i + 1}`}
-                    aria-current={active ? "true" : undefined}
-                    className={`rounded-full transition-all duration-500 ${
-                      active
-                        ? "h-2 w-7 bg-gradient-to-r from-emerald-400 to-cyan-400 shadow-[0_0_14px_rgba(52,211,153,0.45)]"
-                        : "h-2 w-2 bg-white/35 active:bg-white/55"
-                    }`}
-                  />
-                );
-              })}
-            </div>
+                <div className="absolute bottom-3 left-0 right-0 z-20 flex justify-center gap-1.5 px-2 sm:hidden">
+                  {images.map((img, i) => {
+                    const active = i === safeIndex;
+                    return (
+                      <button
+                        key={img.src}
+                        type="button"
+                        onClick={() => goTo(i)}
+                        aria-label={`Show photo ${i + 1}`}
+                        aria-current={active ? "true" : undefined}
+                        className={`rounded-full transition-all duration-500 ${
+                          active
+                            ? "h-2 w-6 bg-gradient-to-r from-emerald-400 to-cyan-400"
+                            : "h-2 w-2 bg-white/35 active:bg-white/55"
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
 
-            {/* Swipe hint — mobile only, first slide */}
-            {isMobile && index === 0 && !prefersReducedMotion && (
-              <motion.p
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
-                className="pointer-events-none absolute left-0 right-0 top-3 z-10 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-white/40"
-              >
-                Swipe to explore
-              </motion.p>
+                {isMobile && safeIndex === 0 && !prefersReducedMotion && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8, duration: 0.5 }}
+                    className="pointer-events-none absolute left-0 right-0 top-3 z-10 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-white/40"
+                  >
+                    Swipe to explore
+                  </motion.p>
+                )}
+              </>
             )}
           </div>
 
-          {/* Desktop thumbnails — inside frame */}
-          <div className="absolute bottom-0 left-0 right-0 z-20 hidden justify-center gap-2.5 p-4 sm:flex">
-            {PORTRAIT_IMAGES.map((img, i) => (
+          {hasMultiple && (
+            <div className="absolute bottom-0 left-0 right-0 z-20 hidden max-w-full justify-center gap-2 overflow-x-auto p-3 sm:flex sm:gap-2 sm:p-4">
+              {images.map((img, i) => (
+                <ThumbnailButton
+                  key={img.src}
+                  img={img}
+                  index={i}
+                  active={i === safeIndex}
+                  isMobile={false}
+                  onSelect={() => goTo(i)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {hasMultiple && (
+        <>
+          <div className="mt-4 flex justify-center gap-2 overflow-x-auto px-2 sm:hidden">
+            {images.map((img, i) => (
               <ThumbnailButton
-                key={img.src}
+                key={`mobile-${img.src}`}
                 img={img}
                 index={i}
-                active={i === index}
-                isMobile={false}
+                active={i === safeIndex}
+                isMobile
                 onSelect={() => goTo(i)}
               />
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Mobile thumbnails — below frame, no face overlap */}
-      <div className="mt-4 flex justify-center gap-3 sm:hidden">
-        {PORTRAIT_IMAGES.map((img, i) => (
-          <ThumbnailButton
-            key={`mobile-${img.src}`}
-            img={img}
-            index={i}
-            active={i === index}
-            isMobile
-            onSelect={() => goTo(i)}
-          />
-        ))}
-      </div>
-
-      {/* Mobile slide labels */}
-      <p className="mt-2 text-center text-xs text-slate-500 sm:hidden" aria-live="polite">
-        {index + 1} of {PORTRAIT_IMAGES.length}
-      </p>
+          <p className="mt-2 text-center text-xs text-slate-500 sm:hidden" aria-live="polite">
+            {safeIndex + 1} of {count}
+          </p>
+        </>
+      )}
     </div>
   );
 }
 
 type ThumbnailButtonProps = {
-  img: (typeof PORTRAIT_IMAGES)[number];
+  img: PortraitImage;
   index: number;
   active: boolean;
   isMobile: boolean;
@@ -359,11 +353,11 @@ function ThumbnailButton({ img, index, active, isMobile, onSelect }: ThumbnailBu
       className={`relative shrink-0 overflow-hidden rounded-xl transition-all duration-500 ${
         isMobile
           ? active
-            ? "h-[72px] w-[56px] ring-2 ring-emerald-400 shadow-[0_0_24px_rgba(52,211,153,0.35)]"
-            : "h-16 w-[52px] opacity-65 ring-1 ring-white/15 active:opacity-90"
+            ? "h-[68px] w-[52px] ring-2 ring-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.35)]"
+            : "h-14 w-[48px] opacity-65 ring-1 ring-white/15 active:opacity-90"
           : active
-            ? "h-14 w-11 ring-2 ring-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.35)]"
-            : "h-11 w-9 opacity-60 ring-1 ring-white/15 hover:opacity-90"
+            ? "h-12 w-10 ring-2 ring-emerald-400 shadow-[0_0_16px_rgba(52,211,153,0.35)]"
+            : "h-10 w-8 opacity-60 ring-1 ring-white/15 hover:opacity-90"
       }`}
     >
       <Image
@@ -372,7 +366,7 @@ function ThumbnailButton({ img, index, active, isMobile, onSelect }: ThumbnailBu
         fill
         className="object-cover"
         style={{ objectPosition: pos }}
-        sizes={isMobile ? "80px" : "64px"}
+        sizes={isMobile ? "72px" : "56px"}
         draggable={false}
       />
       {active && !isMobile && (

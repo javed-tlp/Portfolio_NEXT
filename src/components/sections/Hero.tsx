@@ -3,6 +3,7 @@ import { HeroPortrait } from "@/components/sections/HeroPortrait";
 import { FaGithub, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { HiArrowRight, HiMail } from "react-icons/hi";
 import { siteConfig } from "@/config/site";
+import { getPortraitImages } from "@/lib/portraitImages";
 
 const social = [
   { icon: FaTwitter, href: siteConfig.social.twitter, label: "Twitter" },
@@ -12,6 +13,8 @@ const social = [
 ] as const;
 
 export function Hero() {
+  const portraitImages = getPortraitImages(siteConfig.name);
+
   return (
     <section
       id="top"
@@ -22,7 +25,7 @@ export function Hero() {
       <div className="relative mx-auto grid max-w-6xl gap-8 px-4 sm:gap-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
         {/* Portrait first on mobile for stronger visual impact */}
         <div className="order-1 flex justify-center px-1 sm:order-2 sm:justify-end lg:order-2">
-          <HeroPortrait name={siteConfig.name} />
+          <HeroPortrait name={siteConfig.name} images={portraitImages} />
         </div>
 
         <div className="animate-fade-up order-2 sm:order-1 lg:order-1">
